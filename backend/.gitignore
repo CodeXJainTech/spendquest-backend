@@ -1,0 +1,10 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+db.js
+# Log files
+npm-debug.log*
+
+.vscode/
