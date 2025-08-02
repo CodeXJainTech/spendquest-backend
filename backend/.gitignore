@@ -3,7 +3,9 @@ node_modules/
 
 # Environment variables
 .env
-db.js
+.env.local
+.env.*.local
+
 # Log files
 npm-debug.log*
 
