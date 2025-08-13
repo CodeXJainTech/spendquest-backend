@@ -19,6 +19,7 @@ const signupBody = zod.object({
 router.post("/signup", async (req, res) => {
     const { success } = signupBody.safeParse(req.body)
     if (!success) {
+        console.log("1")
         return res.status(411).json({
             message: "Incorrect inputs"
         })
@@ -29,6 +30,7 @@ router.post("/signup", async (req, res) => {
     })
 
     if (existingUser) {
+        console.log("2")
         return res.status(411).json({
             message: "Email already taken"
         })
@@ -142,8 +144,6 @@ router.get("/bulk", async (req, res) => {
 router.get('/payee', authMiddleware, async (req, res) => {
     try {
         const userId = req.userId;
-
-        // Populate full payee info: userName, firstName, lastName
         const user = await User.findById(userId).populate('payees', 'userName firstName lastName');
 
         if (!user || !user.payees) {
@@ -171,6 +171,22 @@ router.get('/payee', authMiddleware, async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 });
+
+router.get("/me", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json({
+      name: `${user.firstName} ${user.lastName}`,
+      email: user.userName
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 
 module.exports = router;
