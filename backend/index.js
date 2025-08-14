@@ -7,7 +7,7 @@ const app = express();
 
 // Allow only your frontend URL
 const allowedOrigins = [
-  "https://SpendQuest.vercel.app"
+  "https://spendquest.vercel.app"
 ];
 
 app.use(cors({
