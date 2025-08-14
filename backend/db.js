@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { required, minLength, lowercase } = require('zod/v4-mini');
 require('dotenv').config({ quiet: true });
 
 mongoose.connect(process.env.MONGO_URI)
