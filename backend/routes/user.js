@@ -231,7 +231,7 @@ router.post("/changeps", authMiddleware, async (req, res) => {
 
     //Restrict demo accounts
     const demoAccounts = ["demo@spendquest.com", "demo@spendquest1.com"];
-    if (demoAccounts.includes(user.email)) {
+    if (demoAccounts.includes(user.userName)) {
       return res
         .status(403)
         .json({ message: "Password cannot be changed for demo accounts." });
