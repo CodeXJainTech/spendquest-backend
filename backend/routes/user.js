@@ -218,6 +218,7 @@ router.get("/me", authMiddleware, async (req, res) => {
 });
 
 
+//password change.
 router.post("/changeps", authMiddleware, async (req, res) => {
   const { currentPassword, newPassword } = req.body;
   if (!currentPassword || !newPassword) {
@@ -228,14 +229,20 @@ router.post("/changeps", authMiddleware, async (req, res) => {
     const user = await User.findById(req.userId);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // compare old password
+    //Restrict demo accounts
+    const demoAccounts = ["demo@spendquest.com", "demo@spendquest1.com"];
+    if (demoAccounts.includes(user.email)) {
+      return res
+        .status(403)
+        .json({ message: "Password cannot be changed for demo accounts." });
+    }
+
     const bcrypt = require("bcryptjs");
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Current password is incorrect" });
     }
 
-    // hash new password
     const hashed = await bcrypt.hash(newPassword, 10);
     user.password = hashed;
     await user.save();
