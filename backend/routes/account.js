@@ -114,7 +114,7 @@ router.post('/transactions', authMiddleware, async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
-    const { amount, description = "", isReceived = false, category = null } = req.body;
+    const { amount, description = "", isReceived = false, category = null, date = null } = req.body;
     const value = Number(amount);
     if (!value || isNaN(value)) {
       await session.abortTransaction();
@@ -136,7 +136,7 @@ router.post('/transactions', authMiddleware, async (req, res) => {
       amount: value,
       description,
       isReceived,
-      date: new Date(),
+      date: date ? new Date(date) : new Date(),
       category
     }], { session });
 
