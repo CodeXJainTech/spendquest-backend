@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 const { User, Account } = require("../db");
 const { authMiddleware } = require('../middleware');
 require('dotenv').config({ quiet: true });
-const JWT_SECRET = process.env.JWT_SECRET || "replace_this_secret_in_env";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // VALIDATORS
 const signupBody = zod.object({
@@ -79,7 +79,7 @@ router.post("/signin", async (req, res) => {
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    console.log("pkk here");
+    // console.log("pkk here");
     const match = await bcrypt.compare(req.body.password, user.password);
     if (!match) {
       return res.status(401).json({ message: "Invalid credentials" });
@@ -115,7 +115,7 @@ router.put("/", authMiddleware, async (req, res) => {
 });
 
 // GET /user/bulk?filter=...
-router.get("/bulk", async (req, res) => {
+router.get("/bulk", authMiddleware, async (req, res) => {
   try {
     const filter = req.query.filter || "";
     const users = await User.find({

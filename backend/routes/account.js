@@ -171,7 +171,7 @@ router.post('/transactions', authMiddleware, async (req, res) => {
 router.get('/transactions', authMiddleware, async(req,res) => {
   try {
     const userId = req.userId;
-    const { limit = 50, page = 1, category, from, to } = req.query;
+    const { limit = 500, page = 1, category, from, to } = req.query;
     const q = { userId };
 
     if (category) q.category = category;
